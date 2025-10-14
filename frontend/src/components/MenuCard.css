@@ -1,0 +1,41 @@
+.menu-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.menu-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.menu-card h3 {
+  margin: 0.5rem 0;
+}
+
+.menu-card p {
+  margin: 0.25rem 0;
+}
+
+.price {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.menu-card button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.menu-card button:hover {
+  background-color: #218838;
+}

@@ -1,0 +1,89 @@
+.profile {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.user-info,
+.order-history {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.user-info h2,
+.order-history h2 {
+  margin-top: 0;
+}
+
+.user-info button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.user-info button:hover {
+  background-color: #0056b3;
+}
+
+.user-info .cancel-btn {
+  background-color: #6c757d;
+  margin-left: 0.5rem;
+}
+
+.user-info .cancel-btn:hover {
+  background-color: #545b62;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.profile-display {
+  margin-bottom: 1rem;
+}
+
+.profile-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-field:last-child {
+  border-bottom: none;
+}
+
+.profile-field label {
+  font-weight: bold;
+  color: #333;
+}
+
+.profile-field span {
+  color: #666;
+}
+
+.order-history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.order-history li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile {
+    padding: 1rem;
+  }
+}

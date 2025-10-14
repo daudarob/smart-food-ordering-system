@@ -1,0 +1,31 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7",
+    "workbox-build": "^7.3.0"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.9.0",
+    "@stripe/react-stripe-js": "^5.2.0",
+    "@stripe/stripe-js": "^8.0.0",
+    "axios": "^1.12.2",
+    "firebase": "^12.3.0",
+    "jwt-decode": "^4.0.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.3",
+    "recharts": "^3.2.1",
+    "socket.io-client": "^4.8.1",
+    "workbox-sw": "^7.3.0"
+  }
+}

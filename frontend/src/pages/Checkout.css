@@ -1,0 +1,66 @@
+.checkout {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.checkout h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.order-summary {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.order-summary h3 {
+  margin-top: 0;
+}
+
+.order-summary ul {
+  list-style: none;
+  padding: 0;
+}
+
+.order-summary li {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.payment-method {
+  margin-bottom: 20px;
+}
+
+.payment-method h3 {
+  margin-bottom: 10px;
+}
+
+.payment-method label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.payment-method input {
+  margin-right: 10px;
+}
+
+.checkout button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.checkout button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

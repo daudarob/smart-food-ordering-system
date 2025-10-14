@@ -1,0 +1,17 @@
+.app {
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+main {
+  min-height: 80vh;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app {
+    padding: 0 10px;
+  }
+}
