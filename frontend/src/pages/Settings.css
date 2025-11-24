@@ -1,0 +1,956 @@
+/* Enhanced Settings Page with Modern Design System and Theme Support */
+.settings {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-secondary) 100%);
+  padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.settings::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.settings-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background:
+    paint(ai-gradient-paint),
+    linear-gradient(135deg,
+      var(--color-surface) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      var(--color-background-secondary) 100%);
+  border: 3px solid;
+  border-image: linear-gradient(135deg,
+    var(--color-primary),
+    var(--color-accent),
+    var(--color-white),
+    var(--color-primary)) 1;
+  border-radius: 32px;
+  box-shadow:
+    0 25px 50px var(--color-shadow),
+    0 0 100px rgba(37, 99, 235, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  /* transform: perspective(1000px) rotateX(0deg) rotateY(0deg); */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --ai-surface: var(--color-surface);
+  --ai-text: var(--color-text-primary);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+}
+
+.settings-container:hover {
+  /* transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) scale(1.01); */
+  box-shadow:
+    0 35px 70px var(--color-shadow),
+    0 0 150px rgba(37, 99, 235, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.settings-container h2 {
+  background:
+    paint(ai-gradient-paint),
+    linear-gradient(135deg,
+      var(--color-primary) 0%,
+      var(--color-accent) 50%,
+      var(--color-white) 100%);
+  color: var(--color-text-inverse);
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  position: relative;
+  overflow: hidden;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 20px var(--color-primary-light),
+    0 0 40px var(--color-accent);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  /* transform: perspective(1000px) rotateX(0deg); */
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --ai-surface: var(--color-background);
+  --ai-text: var(--color-text-inverse);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+}
+
+.settings-container h2:hover {
+  /* transform: perspective(1000px) rotateX(-5deg) scale(1.02); */
+  text-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    0 0 30px var(--color-primary),
+    0 0 60px var(--color-accent);
+}
+
+.settings-container h2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background:
+    paint(neural-network-paint),
+    linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      rgba(245, 158, 11, 0.3),
+      rgba(255, 255, 255, 0.2),
+      transparent);
+  animation: shimmer 4s infinite;
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+  --neural-tertiary: rgba(255, 255, 255, 0.8);
+  --neural-quaternary: rgba(245, 158, 11, 0.6);
+}
+
+.settings-container h2::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    paint(quantum-field-paint);
+  opacity: 1;
+  pointer-events: none;
+  animation: quantumPulse 6s ease-in-out infinite;
+  --quantum-bg: transparent;
+  --quantum-border: var(--color-primary);
+  --quantum-shadow: var(--color-accent);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) scale(1);
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    transform: translateX(0%) scale(1.05);
+    filter: brightness(1.2) contrast(1.1);
+  }
+  100% {
+    transform: translateX(100%) scale(1);
+    filter: brightness(1) contrast(1);
+  }
+}
+
+@keyframes quantumPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes neuralFlow {
+  0% {
+    transform: translateX(-100%) translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0%) translateY(0%);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%);
+    opacity: 0;
+  }
+}
+
+.settings-tabs {
+  display: flex;
+  background:
+    paint(ai-gradient-paint),
+    paint(neural-network-paint),
+    linear-gradient(135deg,
+      var(--color-background-secondary) 0%,
+      rgba(37, 99, 235, 0.08) 30%,
+      rgba(245, 158, 11, 0.04) 70%,
+      var(--color-surface) 100%);
+  border-bottom: 4px solid;
+  border-image: linear-gradient(90deg,
+    var(--color-primary),
+    var(--color-accent),
+    var(--color-white),
+    var(--color-primary)) 1;
+  position: relative;
+  box-shadow:
+    0 4px 16px rgba(37, 99, 235, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --ai-surface: var(--color-background-secondary);
+  --ai-text: var(--color-text-primary);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+  --neural-tertiary: rgba(37, 99, 235, 0.35);
+  --neural-quaternary: rgba(245, 158, 11, 0.45);
+}
+
+.settings-tabs::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background:
+    paint(quantum-field-paint),
+    linear-gradient(90deg,
+      var(--color-primary),
+      var(--color-accent),
+      var(--color-white),
+      var(--color-primary));
+  transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --quantum-bg: transparent;
+  --quantum-border: var(--color-primary);
+  --quantum-shadow: var(--color-accent);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+}
+
+.settings-tabs button {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 4px solid transparent;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.025em;
+  transform: translateZ(0);
+}
+
+.settings-tabs button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background:
+    paint(ai-gradient-paint),
+    linear-gradient(90deg,
+      transparent,
+      rgba(37, 99, 235, 0.15),
+      rgba(245, 158, 11, 0.1),
+      transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --ai-surface: transparent;
+  --ai-text: var(--color-primary);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+}
+
+.settings-tabs button:hover::before {
+  left: 100%;
+}
+
+.settings-tabs button.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  background:
+    paint(quantum-field-paint),
+    linear-gradient(135deg,
+      var(--color-surface) 0%,
+      rgba(37, 99, 235, 0.1) 100%);
+  box-shadow:
+    inset 0 -4px 0 var(--color-primary),
+    0 4px 12px rgba(37, 99, 235, 0.15);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 0 10px var(--color-primary-light);
+  --quantum-bg: var(--color-surface);
+  --quantum-border: var(--color-primary);
+  --quantum-shadow: var(--color-accent);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+}
+
+.settings-tabs button.active ~ .settings-tabs::before {
+  transform: scaleX(1);
+}
+
+.settings-tabs button:hover {
+  color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.08);
+  transform: translateY(-2px) scale(1.02);
+  text-shadow: 0 0 8px var(--color-primary-light);
+}
+
+/* Enhanced Settings Content */
+.settings-content {
+  padding: 2.5rem;
+  position: relative;
+  background:
+    paint(ai-gradient-paint),
+    radial-gradient(ellipse at top,
+      rgba(37, 99, 235, 0.08) 0%,
+      rgba(245, 158, 11, 0.05) 50%,
+      rgba(255, 255, 255, 0.1) 100%),
+    linear-gradient(135deg,
+      rgba(37, 99, 235, 0.03) 0%,
+      rgba(245, 158, 11, 0.02) 50%,
+      rgba(255, 255, 255, 0.08) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(37, 99, 235, 0.1),
+    0 4px 16px rgba(245, 158, 11, 0.05);
+  --ai-surface: rgba(255, 255, 255, 0.05);
+  --ai-text: var(--color-text-primary);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+}
+
+.settings-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    paint(neural-network-paint),
+    paint(quantum-field-paint);
+  opacity: 1;
+  pointer-events: none;
+  animation: contentFlow 12s ease-in-out infinite;
+  border-radius: 20px;
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+  --neural-tertiary: rgba(37, 99, 235, 0.3);
+  --neural-quaternary: rgba(245, 158, 11, 0.4);
+  --quantum-bg: transparent;
+  --quantum-border: var(--color-primary);
+  --quantum-shadow: var(--color-accent);
+}
+
+@keyframes contentFlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.01) rotate(0.5deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(0.99) rotate(-0.5deg);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.005) rotate(0.25deg);
+  }
+}
+
+.settings-section {
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  background:
+    paint(ai-gradient-paint),
+    paint(neural-network-paint),
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(37, 99, 235, 0.04) 30%,
+      rgba(245, 158, 11, 0.02) 70%,
+      rgba(255, 255, 255, 0.06) 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 2px solid;
+  border-image: linear-gradient(135deg,
+    rgba(37, 99, 235, 0.2),
+    rgba(245, 158, 11, 0.15),
+    rgba(255, 255, 255, 0.1),
+    rgba(37, 99, 235, 0.2)) 1;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(37, 99, 235, 0.1),
+    0 4px 16px rgba(245, 158, 11, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateZ(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --ai-surface: rgba(255, 255, 255, 0.08);
+  --ai-text: var(--color-text-primary);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+  --neural-accent: var(--color-white);
+  --neural-tertiary: rgba(37, 99, 235, 0.25);
+  --neural-quaternary: rgba(245, 158, 11, 0.35);
+}
+
+.settings-section:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 16px 48px rgba(37, 99, 235, 0.15),
+    0 8px 24px rgba(245, 158, 11, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.settings-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    paint(quantum-field-paint);
+  opacity: 1;
+  animation: quantumPulse 10s ease-in-out infinite;
+  pointer-events: none;
+  --quantum-bg: transparent;
+  --quantum-border: var(--color-primary);
+  --quantum-shadow: var(--color-accent);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+}
+
+.settings-section h3 {
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  position: relative;
+  padding-bottom: 0.75rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  transform: translateZ(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-section h3:hover {
+  transform: translateY(-1px);
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.settings-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background:
+    paint(quantum-field-paint),
+    linear-gradient(90deg,
+      var(--color-primary),
+      var(--color-accent),
+      var(--color-white),
+      var(--color-primary));
+  border-radius: 3px;
+  animation: neuralFlow 8s ease-in-out infinite;
+  --quantum-bg: transparent;
+  --quantum-border: var(--color-primary);
+  --quantum-shadow: var(--color-accent);
+  --neural-primary: var(--color-primary);
+  --neural-secondary: var(--color-accent);
+}
+
+.settings-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Profile Picture Section */
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background: var(--color-background-secondary);
+  border-radius: 16px;
+  border: 2px solid var(--color-border);
+}
+
+.current-picture {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--color-primary);
+  box-shadow: 0 8px 24px var(--color-primary-light);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px var(--color-primary-light);
+}
+
+.profile-placeholder {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  font-weight: 800;
+  border: 4px solid var(--color-primary);
+  box-shadow: 0 8px 24px var(--color-primary-light);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.profile-placeholder:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px var(--color-primary-light);
+}
+
+/* Upload Options */
+.upload-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.upload-options button {
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: var(--color-text-inverse);
+  border: 2px solid var(--color-primary);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(30, 64, 175, 0.3);
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
+}
+
+.upload-options button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.upload-options button:hover::before {
+  left: 100%;
+}
+
+.upload-options button:hover {
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
+  border-color: var(--color-primary-hover);
+  color: var(--color-text-inverse);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(30, 64, 175, 0.4);
+}
+
+.upload-options button:active {
+  transform: translateY(-1px);
+}
+
+/* Theme Toggle Section */
+.theme-section {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-hover) 100%);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 2px solid var(--color-border);
+}
+
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--color-background);
+}
+
+.theme-option:hover {
+  border-color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.05);
+  transform: translateY(-2px);
+}
+
+.theme-option.active {
+  border-color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.theme-option .icon {
+  font-size: 1.5rem;
+}
+
+.theme-option .content h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.theme-option .content p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* Status Messages */
+.error {
+  color: var(--color-error);
+  background: var(--color-error-light);
+  border: 2px solid rgba(239, 68, 68, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+  animation: slideInDown 0.4s ease-out;
+}
+
+.success {
+  color: var(--color-success);
+  background: var(--color-success-light);
+  border: 2px solid rgba(16, 185, 129, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+  animation: slideInDown 0.4s ease-out;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+  .settings {
+    padding: 1rem;
+  }
+
+  .settings-container {
+    border-radius: 20px;
+    transform: none;
+  }
+
+  .settings-container:hover {
+    transform: none;
+  }
+
+  .settings-container h2 {
+    padding: 1.5rem;
+    font-size: 1.8rem;
+    transform: none;
+  }
+
+  .settings-container h2:hover {
+    transform: none;
+  }
+
+  .settings-content {
+    padding: 1.5rem;
+  }
+
+  .settings-tabs {
+    flex-direction: column;
+  }
+
+  .settings-tabs button {
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    transform: none;
+  }
+
+  .settings-tabs button:hover {
+    transform: none;
+  }
+
+  .settings-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .settings-section h3 {
+    font-size: 1.3rem;
+    transform: none;
+  }
+
+  .settings-section h3:hover {
+    transform: none;
+  }
+
+  .profile-picture-section {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .profile-image,
+  .profile-placeholder {
+    width: 140px;
+    height: 140px;
+  }
+
+  .upload-options {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .upload-options button {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.875rem 1.5rem;
+  }
+
+  .theme-options {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .theme-option {
+    padding: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings {
+    padding: 0.5rem;
+  }
+
+  .settings-container h2 {
+    padding: 1.25rem;
+    font-size: 1.5rem;
+  }
+
+  .settings-content {
+    padding: 1rem;
+  }
+
+  .settings-section {
+    margin-bottom: 2rem;
+  }
+
+  .profile-picture-section {
+    padding: 1rem;
+  }
+
+  .profile-image,
+  .profile-placeholder {
+    width: 120px;
+    height: 120px;
+    font-size: 2.5rem;
+  }
+
+  .upload-options button {
+    max-width: 240px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .theme-section {
+    padding: 1.25rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .settings-section,
+  .error,
+  .success,
+  .upload-options button,
+  .theme-option,
+  .profile-image,
+  .profile-placeholder,
+  .settings-container,
+  .settings-container h2,
+  .settings-tabs button,
+  .settings-section h3 {
+    animation: none;
+    transition: none;
+  }
+
+  .upload-options button::before,
+  .settings-container h2::before,
+  .settings-container h2::after,
+  .settings-section::before,
+  .settings-tabs::before {
+    animation: none;
+  }
+
+  .upload-options button:hover,
+  .theme-option:hover,
+  .profile-image:hover,
+  .profile-placeholder:hover,
+  .settings-container:hover,
+  .settings-container h2:hover,
+  .settings-tabs button:hover,
+  .settings-section h3:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .settings-container {
+    border-width: 4px;
+    border-image: linear-gradient(135deg,
+      var(--color-primary),
+      var(--color-white),
+      var(--color-accent),
+      var(--color-primary)) 1;
+  }
+
+  .settings-container h2 {
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      0 0 20px var(--color-primary),
+      0 0 40px var(--color-accent);
+  }
+
+  .settings-tabs {
+    border-bottom-width: 4px;
+    border-image: linear-gradient(90deg,
+      var(--color-primary),
+      var(--color-accent),
+      var(--color-white),
+      var(--color-primary)) 1;
+  }
+
+  .settings-tabs button.active {
+    border-bottom-width: 5px;
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 0 10px var(--color-primary-light);
+  }
+
+  .settings-section h3::after {
+    height: 5px;
+  }
+
+  .settings-section {
+    border-width: 2px;
+    border-color: var(--color-primary);
+  }
+
+  .profile-picture-section,
+  .theme-section {
+    border-width: 4px;
+    border-color: var(--color-primary);
+  }
+
+  .error,
+  .success {
+    border-width: 4px;
+  }
+
+  .theme-option {
+    border-width: 4px;
+  }
+
+  .profile-image,
+  .profile-placeholder {
+    border-width: 5px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .settings {
+    background: white !important;
+  }
+
+  .settings-container {
+    box-shadow: none !important;
+    border: 1px solid white !important;
+  }
+
+  .settings-tabs,
+  .upload-options,
+  .theme-options {
+    display: none !important;
+  }
+
+  .settings-content {
+    padding: 1rem !important;
+  }
+}

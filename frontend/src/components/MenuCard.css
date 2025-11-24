@@ -1,41 +1,424 @@
+/* Enhanced Menu Card Component with Modern Design System */
 .menu-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 2px solid #666666;
+  border-radius: 20px;
+  padding: 0.75rem;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  cursor: pointer;
+  transform: translateZ(0);
+}
+
+.menu-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FFD700, #E6C200, #FFD700);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: #FFD700;
+}
+
+.menu-card:hover::before {
+  opacity: 1;
+}
+
+.menu-card:focus-within {
+  outline: 2px solid #FFD700;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.3);
+}
+
+/* Image Container */
+.menu-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto 0.25rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.menu-card:hover .menu-image-container {
+  transform: scale(1.05);
 }
 
 .menu-image {
   width: 100%;
-  max-width: 200px;
-  height: auto;
-  border-radius: 4px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.menu-card:hover .menu-image {
+  transform: scale(1.1);
+}
+
+/* Out of Stock Overlay */
+.out-of-stock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+}
+
+.out-of-stock-text {
+  color: #FFFFFF;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Image Fallback */
+.image-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #FFD700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  color: #000000;
+  font-size: 3rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Content */
+.menu-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.favorite-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  line-height: 1;
+  color: #000000;
+}
+
+.favorite-button:hover {
+  transform: scale(1.1);
+}
+
+.favorite-button.active {
+  color: #ff4757;
 }
 
 .menu-card h3 {
-  margin: 0.5rem 0;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #000000;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  text-shadow: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
 }
 
-.menu-card p {
-  margin: 0.25rem 0;
+.menu-card .description {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #000000;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
 }
 
 .price {
-  font-weight: bold;
-  color: #007bff;
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: #000000;
+  margin: 0.125rem 0;
+  letter-spacing: -0.025em;
+  text-shadow: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
 }
 
-.menu-card button {
-  background-color: #28a745;
-  color: white;
+.price-currency {
+  font-size: 1rem;
+  font-weight: 600;
+  vertical-align: top;
+}
+
+/* Action Button */
+.menu-card .action-button {
+  margin-top: auto;
+  padding: 0.4rem 0.8rem;
+  background: #ffd700;
+  color: #001f54;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
-.menu-card button:hover {
-  background-color: #218838;
+.menu-card .action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-card .action-button:hover {
+  background: #e6c200;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+  color: #001f54;
+}
+
+.menu-card .action-button:hover::before {
+  left: 100%;
+}
+
+.menu-card .action-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.menu-card .action-button:disabled {
+  background: #CCCCCC;
+  color: #666666;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Variants */
+.menu-card.featured {
+  border-color: #FFD700;
+  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
+}
+
+.menu-card.featured::before {
+  background: linear-gradient(90deg, #FFD700, #E6C200, #FFD700);
+}
+
+.menu-card.vegetarian {
+  border-color: #28A745;
+}
+
+.menu-card.vegetarian .menu-content::before {
+  content: '🌱';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  z-index: 1;
+}
+
+.menu-card.spicy {
+  border-color: #DC3545;
+}
+
+.menu-card.spicy .menu-content::before {
+  content: '🌶️';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  z-index: 1;
+}
+
+/* Loading State */
+.menu-card.loading {
+  pointer-events: none;
+}
+
+.menu-card.loading .menu-image {
+  background: linear-gradient(90deg, #F0F0F0 25%, #E0E0E0 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.menu-card.loading h3,
+.menu-card.loading .description,
+.menu-card.loading .price {
+  background: linear-gradient(90deg, #F0F0F0 25%, #E0E0E0 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  color: transparent;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .menu-card {
+    padding: 0.75rem;
+    border-radius: 16px;
+  }
+
+  .menu-image-container {
+    max-width: 200px;
+  }
+
+  .menu-image {
+    height: 100px;
+  }
+
+  .menu-card h3 {
+    font-size: 1rem;
+  }
+
+  .price {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-card {
+    padding: 0.625rem;
+  }
+
+  .menu-image-container {
+    max-width: 160px;
+  }
+
+  .menu-image {
+    height: 80px;
+  }
+
+  .menu-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .price {
+    font-size: 1.125rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .menu-card,
+  .menu-image-container,
+  .menu-image,
+  .menu-card .action-button,
+  .menu-card .action-button::before {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+
+  .menu-card:hover,
+  .menu-card:hover .menu-image-container,
+  .menu-card:hover .menu-image,
+  .menu-card .action-button:hover {
+    transform: none;
+  }
+
+  .menu-card.loading .menu-image,
+  .menu-card.loading h3,
+  .menu-card.loading .description,
+  .menu-card.loading .price {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .menu-card {
+    border-width: 3px;
+  }
+
+  .menu-card.featured {
+    border-color: #FFD700;
+    border-width: 3px;
+  }
+
+  .menu-card.vegetarian {
+    border-color: #28A745;
+    border-width: 3px;
+  }
+
+  .menu-card.spicy {
+    border-color: #DC3545;
+    border-width: 3px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .menu-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid white;
+  }
+
+  .menu-card .action-button {
+    display: none;
+  }
 }

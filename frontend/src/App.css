@@ -1,17 +1,140 @@
+/* Global height for full height layouts */
+html, body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 80px; /* Account for fixed header */
+  background: #FFFFFF;
+}
+
+/* Base accessibility styles */
 .app {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: #FFFFFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Focus management */
+*:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: transparent;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .app {
+    background-color: #FFFFFF;
+    color: var(--color-dark-gray);
+  }
+
+  button, input, select, textarea {
+    border: 2px solid var(--color-dark-gray);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Color scheme support */
+@media (prefers-color-scheme: dark) {
+  .app {
+    background-color: #FFFFFF;
+    color: #e0e0e0;
+  }
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus within for better keyboard navigation */
+button:focus-within,
+input:focus-within,
+select:focus-within,
+textarea:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 main {
-  min-height: 80vh;
+  flex: 1;
 }
 
-/* Responsive design */
+/* Responsive design with accessibility considerations */
 @media (max-width: 768px) {
   .app {
     padding: 0 10px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Ensure touch targets are at least 44px */
+  button, input, select, textarea, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 0 5px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .app {
+    background: #FFFFFF !important;
+    color: var(--color-dark-gray) !important;
+  }
+
+  button, input, select, textarea {
+    border: 1px solid var(--color-dark-gray) !important;
   }
 }

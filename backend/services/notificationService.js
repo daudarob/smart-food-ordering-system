@@ -15,21 +15,25 @@ try {
 }
 
 try {
-  if (process.env.SENDGRID_API_KEY) {
+  if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_API_KEY !== 'dummy') {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  } else {
+    console.log('SendGrid not configured for development - skipping initialization');
   }
 } catch (error) {
   console.warn('SendGrid initialization failed:', error.message);
 }
 
 try {
-  if (process.env.FIREBASE_PROJECT_ID) {
+  if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PROJECT_ID !== 'dummy') {
     const serviceAccount = require('../config/firebase-service-account.json');
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
       projectId: process.env.FIREBASE_PROJECT_ID
     });
     firebaseInitialized = true;
+  } else {
+    console.log('Firebase not configured for development - skipping initialization');
   }
 } catch (error) {
   console.warn('Firebase initialization failed:', error.message);

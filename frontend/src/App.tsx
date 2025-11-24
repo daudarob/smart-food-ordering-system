@@ -1,23 +1,24 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from './redux/store';
+import { Provider, useSelector } from 'react-redux';
+import { store } from './redux/store';
+import { initializeAuth } from './redux/authSlice';
+import { updateOrderStatus } from './redux/ordersSlice';
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import io from 'socket.io-client';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import { getMessaging } from 'firebase/messaging';
+import { socketService } from './services/socketService';
+import type { RootState } from './redux/store';
 import Home from './pages/Home';
+import Login from './pages/Login';
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Profile from './pages/Profile';
-import Login from './pages/Login';
+import Settings from './pages/Settings';
 import AdminDashboard from './pages/AdminDashboard';
-import CampusCafeteriaOrdering from './components/CampusCafeteriaOrdering';
-import { fetchCategories, fetchMenuItems } from './redux/menuSlice';
-import { updateOrderStatus } from './redux/ordersSlice';
-import { updateOrderStatusLocally } from './redux/adminSlice';
+import Cafeterias from './pages/Cafeterias';
+import Offline from './pages/Offline';
+import Header from './components/Header';
 import './App.css';
 
 // Firebase config (replace with your actual config)
@@ -30,104 +31,69 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+// Initialize Firebase only if config is available
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== 'dummy_api_key') {
+  try {
+    const app = initializeApp(firebaseConfig);
+    void getMessaging(app);
+    console.log('Firebase initialized successfully');
+  } catch (error) {
+    console.warn('Firebase initialization failed:', error);
+  }
+} else {
+  console.log('Firebase not configured for development - skipping initialization');
+}
 
-// Socket.io client
-const socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000');
+// Socket service will be initialized in AppContent component
 
-const App: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+const AppContent: React.FC = () => {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
+  // Initialize socket connection when user is authenticated
   useEffect(() => {
-    dispatch(fetchCategories());
-    dispatch(fetchMenuItems());
-  }, [dispatch]);
-
-  useEffect(() => {
-    // Request notification permission and get FCM token
-    const requestNotificationPermission = async () => {
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          const token = await getToken(messaging, { vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY });
-          if (token) {
-            // Send token to backend to store for user
-            console.log('FCM Token:', token);
-            // TODO: Send token to backend API
-          }
-        }
-      } catch (error) {
-        console.error('Error getting notification permission:', error);
-      }
-    };
-
-    requestNotificationPermission();
-
-    // Handle incoming messages
-    const unsubscribe = onMessage(messaging, (payload) => {
-      console.log('Message received:', payload);
-      // Display notification
-      if (payload.notification) {
-        new Notification(payload.notification.title || 'Notification', {
-          body: payload.notification.body || '',
-          icon: '/vite.svg'
-        });
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    // Socket.io connection
     if (isAuthenticated && user) {
-      socket.emit('join', user.id);
-
-      socket.on('orderStatusUpdate', (data) => {
-        console.log('Order status update:', data);
-        dispatch(updateOrderStatus({ orderId: data.orderId, status: data.status, updatedAt: data.updatedAt }));
-      });
-
-      socket.on('menuUpdated', () => {
-        console.log('Menu updated, fetching latest menu items');
-        dispatch(fetchMenuItems());
-      });
-
-      socket.on('orderStatusChanged', (data) => {
-        console.log('Order status changed:', data);
-        dispatch(updateOrderStatusLocally(data));
-      });
+      console.log('Initializing socket connection for user:', user.id);
+      socketService.connect(user.id);
+    } else {
+      socketService.disconnect();
     }
 
+    // Cleanup on unmount
     return () => {
-      socket.off('orderStatusUpdate');
-      socket.off('menuUpdated');
-      socket.off('orderStatusChanged');
+      socketService.disconnect();
     };
   }, [isAuthenticated, user]);
 
   return (
-    <Router>
-      <div className="app">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/cafeteria" element={<CampusCafeteriaOrdering />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className="app">
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/cafeterias" element={<Cafeterias />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/offline" element={<Offline />} />
+      </Routes>
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  useEffect(() => {
+    store.dispatch(initializeAuth());
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <Router>
+        <AppContent />
+      </Router>
+    </Provider>
   );
 };
 

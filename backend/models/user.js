@@ -43,12 +43,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
+    profile_picture: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+      defaultValue: null
+    },
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'user',
+      defaultValue: 'student',
       validate: {
-        isIn: [['user', 'admin']]
+        isIn: [['student', 'staff', 'cafeteria_admin']]
       }
     },
     cafeteria_id: {
@@ -58,6 +63,11 @@ module.exports = (sequelize, DataTypes) => {
         model: 'cafeterias',
         key: 'id'
       }
+    },
+    favorites: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: []
     },
     created_at: {
       type: DataTypes.DATE,

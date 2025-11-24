@@ -43,7 +43,7 @@ interface Cafeteria {
 
 const cafeterias: Cafeteria[] = [
   {
-    id: 'pauls-cafe',
+    id: 'cafeteria-paul-caffe',
     name: "Paul Caffe",
     description: 'Traditional American comfort food with a modern twist',
     image: '/pauls-cafe.jpeg',
@@ -57,7 +57,7 @@ const cafeterias: Cafeteria[] = [
     }
   },
   {
-    id: 'cafelater',
+    id: 'cafeteria-cafelater',
     name: 'Cafelater',
     description: 'Italian-inspired cuisine with fresh pasta and espresso',
     image: '/coffe.jpg',
@@ -67,7 +67,7 @@ const cafeterias: Cafeteria[] = [
     specialties: ['Pasta', 'Pizza', 'Espresso']
   },
   {
-    id: 'sironi-student',
+    id: 'cafeteria-sironi-student-center',
     name: 'Sironi Student Center',
     description: 'Quick bites and healthy options for busy students',
     image: '/humanity.png',
@@ -81,7 +81,7 @@ const cafeterias: Cafeteria[] = [
     }
   },
   {
-    id: 'sironi-humanity',
+    id: 'cafeteria-sironi-humanity',
     name: 'Sironi Humanity',
     description: 'Global fusion cuisine celebrating cultural diversity',
     image: '/humanity.png',
@@ -113,58 +113,111 @@ const CampusCafeteriaOrdering: React.FC = () => {
   const [loyaltyPoints, setLoyaltyPoints] = useState(150);
   const [recommendations, setRecommendations] = useState<MenuItem[]>([]);
   const [showNutritional, setShowNutritional] = useState<string | null>(null);
+  const [currentOrderId, setCurrentOrderId] = useState<string>('');
 
-  // Mock menu data - in real app, this would come from API
-  const mockMenuItems: MenuItem[] = [
-    {
-      id: '1',
-      name: 'Classic Cheeseburger',
-      description: 'Juicy beef patty with cheese, lettuce, tomato, and special sauce',
-      price: 12.99,
-      category: 'Burgers',
-      available: true,
-      image_url: '/burger.png',
-      nutritional_info: { calories: 650, protein: 35, carbs: 45, fat: 32 },
-      allergens: ['Dairy', 'Gluten']
-    },
-    {
-      id: '2',
-      name: 'Margherita Pizza',
-      description: 'Fresh mozzarella, tomato sauce, and basil on thin crust',
-      price: 14.99,
-      category: 'Pizza',
-      available: true,
-      nutritional_info: { calories: 280, protein: 12, carbs: 35, fat: 8 },
-      allergens: ['Dairy', 'Gluten']
-    },
-    {
-      id: '3',
-      name: 'Caesar Salad',
-      description: 'Crisp romaine lettuce with parmesan, croutons, and caesar dressing',
-      price: 9.99,
-      category: 'Salads',
-      available: true,
-      nutritional_info: { calories: 180, protein: 8, carbs: 12, fat: 12 },
-      allergens: ['Dairy', 'Eggs']
-    }
-  ];
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
 
-  // Simulate AI recommendations based on user preferences
+  // Load menu items from API
   useEffect(() => {
-    if (selectedCafeteria && user) {
-      // Mock AI logic - in real app, this would use ML algorithms
-      const userPrefs = ['Pizza', 'Pasta', 'Healthy'];
-      const recommended = mockMenuItems.filter(item =>
+    const loadMenuItems = async () => {
+      if (!selectedCafeteria) return;
+
+      setLoading(true);
+      setError('');
+      try {
+        const { default: api } = await import('../utils/api');
+        const response = await api.get('/menu');
+        const menuData = response.data;
+
+        // Transform API data to match our MenuItem interface
+        const transformedMenu: MenuItem[] = menuData
+          .filter((item: any) => item.cafeteria_id === selectedCafeteria.id) // Filter by selected cafeteria
+          .map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            description: item.description || '',
+            price: parseFloat(item.price),
+            category: item.Category?.name || 'Other',
+            available: item.available !== false, // Default to true if not specified
+            stock: item.stock,
+            image_url: item.image_url,
+            nutritional_info: undefined, // API doesn't provide this yet
+            allergens: [] // API doesn't provide this yet
+          }));
+
+        setMenuItems(transformedMenu);
+
+        // Update cafeteria menu
+        setSelectedCafeteria(prev => prev ? {
+          ...prev,
+          menu: transformedMenu
+        } : null);
+
+      } catch (err: any) {
+        console.error('Failed to load menu items:', err);
+        setError('Failed to load menu items. Using demo data.');
+
+        // Fallback to mock data if API fails
+        const mockMenuItems: MenuItem[] = [
+          {
+            id: '1',
+            name: 'Classic Cheeseburger',
+            description: 'Juicy beef patty with cheese, lettuce, tomato, and special sauce',
+            price: 12.99,
+            category: 'Burgers',
+            available: true,
+            image_url: '/burger.png',
+            nutritional_info: { calories: 650, protein: 35, carbs: 45, fat: 32 },
+            allergens: ['Dairy', 'Gluten']
+          },
+          {
+            id: '2',
+            name: 'Margherita Pizza',
+            description: 'Fresh mozzarella, tomato sauce, and basil on thin crust',
+            price: 14.99,
+            category: 'Pizza',
+            available: true,
+            nutritional_info: { calories: 280, protein: 12, carbs: 35, fat: 8 },
+            allergens: ['Dairy', 'Gluten']
+          },
+          {
+            id: '3',
+            name: 'Caesar Salad',
+            description: 'Crisp romaine lettuce with parmesan, croutons, and caesar dressing',
+            price: 9.99,
+            category: 'Salads',
+            available: true,
+            nutritional_info: { calories: 180, protein: 8, carbs: 12, fat: 12 },
+            allergens: ['Dairy', 'Eggs']
+          }
+        ];
+        setMenuItems(mockMenuItems);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadMenuItems();
+  }, [selectedCafeteria?.id]);
+
+  // Generate recommendations based on loaded menu items
+  useEffect(() => {
+    if (selectedCafeteria && user && menuItems.length > 0) {
+      // Simple recommendation logic based on categories
+      const userPrefs = ['Pizza', 'Pasta', 'Healthy', 'Salads'];
+      const recommended = menuItems.filter(item =>
         userPrefs.some(pref => item.category.toLowerCase().includes(pref.toLowerCase()))
       );
       setRecommendations(recommended.slice(0, 3));
     }
-  }, [selectedCafeteria, user]);
+  }, [selectedCafeteria, user, menuItems]);
 
   const filteredMenu = useMemo(() => {
     if (!selectedCafeteria) return [];
 
-    let items = selectedCafeteria.menu.length > 0 ? selectedCafeteria.menu : mockMenuItems;
+    let items = menuItems.length > 0 ? menuItems : selectedCafeteria.menu;
 
     if (searchTerm) {
       items = items.filter(item =>
@@ -178,13 +231,13 @@ const CampusCafeteriaOrdering: React.FC = () => {
     }
 
     return items;
-  }, [selectedCafeteria, searchTerm, selectedCategory]);
+  }, [selectedCafeteria, menuItems, searchTerm, selectedCategory]);
 
   const categories = useMemo(() => {
     if (!selectedCafeteria) return [];
-    const cats = new Set((selectedCafeteria.menu.length > 0 ? selectedCafeteria.menu : mockMenuItems).map(item => item.category));
+    const cats = new Set(menuItems.length > 0 ? menuItems.map(item => item.category) : selectedCafeteria.menu.map(item => item.category));
     return ['All', ...Array.from(cats)];
-  }, [selectedCafeteria]);
+  }, [selectedCafeteria, menuItems]);
 
   const handleAddToCart = (item: MenuItem) => {
     dispatch(addItem({
@@ -203,20 +256,48 @@ const CampusCafeteriaOrdering: React.FC = () => {
     }
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
-    setShowPayment(true);
+
+    if (cartItems.length === 0) {
+      alert('Your cart is empty. Please add items before checkout.');
+      return;
+    }
+
+    // Create order first
+    try {
+      const { default: api } = await import('../utils/api');
+      // Use real menu item IDs from the cart
+      const items = cartItems.map(item => ({ menuId: item.id, quantity: item.quantity }));
+      const orderData = {
+        items,
+        total,
+        paymentMethod: 'mpesa',
+        phoneNumber: '254712345678' // Default phone for demo - in real app, get from user profile
+      };
+
+      console.log('Creating order with items:', items);
+      const response = await api.post('/orders', orderData);
+      console.log('Order created successfully:', response.data);
+      setCurrentOrderId(response.data.orderId);
+      setShowPayment(true);
+    } catch (error: any) {
+      console.error('Failed to create order:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      alert(`Failed to create order: ${error.response?.data?.error || error.message}`);
+    }
   };
 
   const handlePaymentSuccess = (method: string) => {
-    // Mock payment processing
+    // Payment was successful, order is confirmed
     alert(`Payment processed via ${method}! Order placed successfully.`);
     dispatch(clearCart());
     setShowPayment(false);
     setShowCart(false);
+    setCurrentOrderId(''); // Reset for next order
     // Award loyalty points
     setLoyaltyPoints(prev => prev + Math.floor(total / 10));
   };
@@ -340,54 +421,68 @@ const CampusCafeteriaOrdering: React.FC = () => {
         </div>
 
         <div className="menu-grid">
-          {filteredMenu.map(item => (
-            <div key={item.id} className="menu-item-card">
-              <div className="item-image">
-                {!item.available && <div className="unavailable-overlay">Out of Stock</div>}
-                {item.nutritional_info && (
-                  <button
-                    className="nutrition-btn"
-                    onClick={() => setShowNutritional(showNutritional === item.id ? null : item.id)}
-                    aria-label="View nutritional information"
+          {loading ? (
+            <div className="loading">Loading menu items...</div>
+          ) : error ? (
+            <div className="error">Error loading menu: {error}</div>
+          ) : filteredMenu.length === 0 ? (
+            <div className="no-items">No menu items available</div>
+          ) : (
+            filteredMenu.map(item => (
+              <div key={item.id} className="menu-item-card">
+                <div className="item-image">
+                  {item.image_url && <img src={item.image_url} alt={item.name} />}
+                  {!item.available && <div className="unavailable-overlay">Out of Stock</div>}
+                  {item.nutritional_info && (
+                    <button
+                      className="nutrition-btn"
+                      onClick={() => setShowNutritional(showNutritional === item.id ? null : item.id)}
+                      aria-label="View nutritional information"
+                    >
+                      ℹ️
+                    </button>
+                  )}
+                </div>
+                <div className="item-info">
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <div className="item-meta">
+                    <span className="price">KES {item.price.toFixed(2)}</span>
+                    <span className="category">{item.category}</span>
+                  </div>
+                  {item.stock !== undefined && (
+                    <div className="stock-info">
+                      <small>Stock: {item.stock}</small>
+                    </div>
+                  )}
+                  {item.allergens && item.allergens.length > 0 && (
+                    <div className="allergens">
+                      <small>Allergens: {item.allergens.join(', ')}</small>
+                    </div>
+                  )}
+                  <Button
+                    onClick={() => handleAddToCart(item)}
+                    disabled={!item.available}
                   >
-                    ℹ️
-                  </button>
-                )}
-              </div>
-              <div className="item-info">
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
-                <div className="item-meta">
-                  <span className="price">KES {item.price}</span>
-                  <span className="category">{item.category}</span>
+                    {item.available ? 'Add to Cart' : 'Unavailable'}
+                  </Button>
                 </div>
-                {item.allergens && item.allergens.length > 0 && (
-                  <div className="allergens">
-                    <small>Allergens: {item.allergens.join(', ')}</small>
-                  </div>
-                )}
-                <Button
-                  onClick={() => handleAddToCart(item)}
-                  disabled={!item.available}
-                >
-                  {item.available ? 'Add to Cart' : 'Unavailable'}
-                </Button>
-              </div>
 
-              {showNutritional === item.id && item.nutritional_info && (
-                <div className="nutrition-overlay">
-                  <h4>Nutritional Information</h4>
-                  <div className="nutrition-grid">
-                    <div>Calories: {item.nutritional_info.calories}</div>
-                    <div>Protein: {item.nutritional_info.protein}g</div>
-                    <div>Carbs: {item.nutritional_info.carbs}g</div>
-                    <div>Fat: {item.nutritional_info.fat}g</div>
+                {showNutritional === item.id && item.nutritional_info && (
+                  <div className="nutrition-overlay">
+                    <h4>Nutritional Information</h4>
+                    <div className="nutrition-grid">
+                      <div>Calories: {item.nutritional_info.calories}</div>
+                      <div>Protein: {item.nutritional_info.protein}g</div>
+                      <div>Carbs: {item.nutritional_info.carbs}g</div>
+                      <div>Fat: {item.nutritional_info.fat}g</div>
+                    </div>
+                    <button onClick={() => setShowNutritional(null)}>Close</button>
                   </div>
-                  <button onClick={() => setShowNutritional(null)}>Close</button>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ))
+          )}
         </div>
       </section>
 
@@ -425,9 +520,11 @@ const CampusCafeteriaOrdering: React.FC = () => {
                 </div>
               )}
             </div>
-            <Button onClick={handleCheckout} disabled={cartItems.length === 0}>
-              Proceed to Checkout
-            </Button>
+            <div className="checkout-button-container">
+              <Button onClick={handleCheckout} disabled={cartItems.length === 0}>
+                Proceed to Checkout
+              </Button>
+            </div>
           </div>
         </div>
       )}
@@ -437,7 +534,7 @@ const CampusCafeteriaOrdering: React.FC = () => {
         onClose={() => setShowPayment(false)}
         total={total}
         onPaymentSuccess={handlePaymentSuccess}
-        orderId={1} // TODO: Create order and get real orderId
+        orderId={currentOrderId}
         cafeteriaName={selectedCafeteria?.name}
         mpesaInstructions={selectedCafeteria?.mpesaInstructions}
       />

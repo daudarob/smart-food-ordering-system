@@ -1,0 +1,24 @@
+.cafeteria-card-skeleton {
+  background: var(--surface-primary, rgba(255, 255, 255, 0.1));
+  padding: 30px 20px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.2));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.cafeteria-icon-skeleton {
+  margin-bottom: 10px;
+}
+
+.cafeteria-name-skeleton {
+  margin-bottom: 8px;
+}
+
+.cafeteria-location-skeleton,
+.cafeteria-hours-skeleton {
+  margin-bottom: 4px;
+}

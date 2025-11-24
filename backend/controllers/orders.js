@@ -1,18 +1,24 @@
 const Joi = require('joi');
 const { Order, OrderItem, MenuItem, User } = require('../models');
-const { sequelize } = require('../models');
+const { sequelize } = require('../config/database');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const notificationService = require('../services/notificationService');
+const invoiceService = require('../services/invoiceService');
 
 const createOrderSchema = Joi.object({
   items: Joi.array().items(
     Joi.object({
-      menuId: Joi.string().uuid().required(),
+      menuId: Joi.string().required(),
       quantity: Joi.number().integer().min(1).required()
     })
   ).min(1).required(),
   total: Joi.number().positive().required(),
-  paymentMethod: Joi.string().valid('mpesa', 'stripe').required()
+  paymentMethod: Joi.string().valid('mpesa', 'stripe').required(),
+  phoneNumber: Joi.string().when('paymentMethod', {
+    is: 'mpesa',
+    then: Joi.string().required(),
+    otherwise: Joi.string().optional()
+  })
 });
 
 const updateStatusSchema = Joi.object({
@@ -77,10 +83,9 @@ const createOrder = async (req, res) => {
       });
       paymentResponse = { clientSecret: paymentIntent.client_secret };
     } else if (paymentMethod === 'mpesa') {
-      // Simulate M-Pesa STK push success
-      order.payment_status = 'paid';
-      await order.save();
-      paymentResponse = { message: 'M-Pesa payment initiated successfully' };
+      // For M-Pesa, we need to initiate payment through the payments controller
+      // This will be handled by the frontend calling the payments/initiate endpoint
+      paymentResponse = { message: 'Order created. Proceed to payment initiation.' };
     }
 
     res.status(201).json({ orderId: order.id, status: order.status, payment: paymentResponse });
@@ -116,11 +121,12 @@ const getUserOrders = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const where = {};
-    if (req.user && req.user.role === 'admin' && req.user.cafeteria_id) {
+    if (req.user && req.user.role === 'cafeteria_admin' && req.user.cafeteria_id) {
       where.cafeteria_id = req.user.cafeteria_id;
     }
     const orders = await Order.findAll({
       where,
+      attributes: ['id', 'total', 'status', 'payment_status', 'payment_method', 'mpesa_receipt_number', 'created_at'],
       include: [{
         model: OrderItem,
         include: [{
@@ -153,24 +159,53 @@ const updateOrderStatus = async (req, res) => {
     if (!order) return res.status(404).json({ error: 'Order not found' });
 
     // Check if admin owns this order
-    if (req.user.role === 'admin' && order.cafeteria_id !== req.user.cafeteria_id) {
+    if (req.user.role === 'cafeteria_admin' && order.cafeteria_id !== req.user.cafeteria_id) {
       return res.status(403).json({ error: 'Access denied: Order belongs to another cafeteria' });
     }
 
+    const previousStatus = order.status;
     order.status = status;
     await order.save();
+
+    // Check if we should generate an invoice (order completed and paid)
+    let generatedInvoice = null;
+    if (invoiceService.shouldGenerateInvoice(order, status)) {
+      try {
+        console.log(`Generating invoice for completed order ${order.id}`);
+        generatedInvoice = await invoiceService.generateInvoiceFromOrder(order);
+        console.log(`Invoice generated successfully: ${generatedInvoice.invoice_number}`);
+      } catch (invoiceError) {
+        console.error('Failed to generate invoice:', invoiceError);
+        // Don't fail the order status update if invoice generation fails
+        // Log the error but continue
+      }
+    }
 
     // Send notifications (simplified for testing)
     // await notificationService.notifyOrderStatusChange(order, { name: 'User', email: 'user@example.com' });
 
-    // Emit real-time update
+    // Emit real-time update to user
     const io = req.app.get('io');
-    io.emit('orderStatusChanged', {
+    io.to(`user_${order.user_id}`).emit('order-status-update', {
       orderId: order.id,
-      status: order.status
+      status: order.status,
+      updatedAt: order.updated_at
     });
 
-    res.json({ message: 'Order status updated' });
+    const response = {
+      message: 'Order status updated',
+      invoiceGenerated: !!generatedInvoice
+    };
+
+    if (generatedInvoice) {
+      response.invoice = {
+        id: generatedInvoice.id,
+        invoice_number: generatedInvoice.invoice_number,
+        total: generatedInvoice.total
+      };
+    }
+
+    res.json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });

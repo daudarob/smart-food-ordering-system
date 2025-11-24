@@ -1,31 +1,280 @@
+/* Enhanced Button Component with Modern Design System */
 .button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button:hover::before {
+  left: 100%;
+}
+
+.button:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+/* Primary Button Variants */
 .primary {
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
 }
 
 .primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
+  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+  transform: translateY(-2px);
 }
 
+.primary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+
+/* Secondary Button Variants */
 .secondary {
-  background-color: #6c757d;
-  color: white;
+  background: #ffd700;
+  color: #001f54;
+  border: none;
+  box-shadow: 0 2px 8px var(--color-shadow-light);
 }
 
 .secondary:hover {
-  background-color: #545b62;
+  background: #e6c200;
+  color: #001f54;
+  border: none;
+  box-shadow: 0 4px 16px var(--color-shadow);
+  transform: translateY(-1px);
 }
 
+.secondary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+
+/* Success Button */
+.success {
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-light) 100%);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  border: 2px solid var(--color-success);
+}
+
+.success:hover {
+  background: linear-gradient(135deg, var(--color-success-light) 0%, var(--color-success) 100%);
+  border-color: var(--color-success-light);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  color: var(--color-text-inverse);
+}
+
+/* Warning Button */
+.warning {
+  background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning-light) 100%);
+  color: var(--color-text-primary);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.warning:hover {
+  background: linear-gradient(135deg, var(--color-warning-light) 0%, var(--color-warning) 100%);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  color: var(--color-text-primary);
+}
+
+/* Error Button */
+.error {
+  background: linear-gradient(135deg, var(--color-error) 0%, var(--color-error-light) 100%);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.error:hover {
+  background: linear-gradient(135deg, var(--color-error-light) 0%, var(--color-error) 100%);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Glass Effect Button */
+.glass {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+}
+
+.glass:hover {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Size Variants */
+.button.sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 8px;
+}
+
+.button.lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  border-radius: 16px;
+}
+
+.button.xl {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.25rem;
+  border-radius: 20px;
+}
+
+/* Icon Buttons */
+.button.icon-only {
+  padding: 0.75rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.button.icon-only.sm {
+  padding: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.button.icon-only.lg {
+  padding: 1rem;
+  width: 4rem;
+  height: 4rem;
+}
+
+/* Loading State */
+.button.loading {
+  pointer-events: none;
+  position: relative;
+  color: transparent;
+}
+
+.button.loading::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  top: 50%;
+  left: 50%;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Disabled State */
 .button:disabled {
-  background-color: #ccc;
+  background: var(--color-gray-300);
+  color: var(--color-gray-500);
+  border-color: var(--color-gray-300);
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.button:disabled:hover {
+  background: var(--color-gray-300);
+  color: var(--color-gray-500);
+  border-color: var(--color-gray-300);
+  transform: none;
+  box-shadow: none;
+}
+
+.button:disabled::before {
+  display: none;
+}
+
+/* Focus Management */
+.button:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .button.lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+  }
+
+  .button.xl {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button::before {
+    display: none;
+  }
+
+  .button:hover {
+    transform: none;
+  }
+
+  .button:active {
+    transform: none;
+  }
+
+  .button.loading::after {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .button {
+    border-width: 3px;
+  }
+
+  .secondary {
+    border-color: var(--color-gray-700);
+  }
 }

@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.1.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
     "workbox-build": "^7.3.0"
@@ -21,7 +23,10 @@
     "@stripe/stripe-js": "^8.0.0",
     "axios": "^1.12.2",
     "firebase": "^12.3.0",
+    "i18next": "^25.6.0",
+    "i18next-browser-languagedetector": "^8.2.0",
     "jwt-decode": "^4.0.0",
+    "react-i18next": "^16.2.4",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.3",
     "recharts": "^3.2.1",

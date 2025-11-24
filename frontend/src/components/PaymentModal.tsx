@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from './Button';
 import FormInput from './FormInput';
 import api from '../utils/api';
@@ -9,7 +9,7 @@ interface PaymentModalProps {
   onClose: () => void;
   total: number;
   onPaymentSuccess: (method: string) => void;
-  orderId: number;
+  orderId: string;
   cafeteriaName?: string;
   mpesaInstructions?: {
     method: 'Pay Bill' | 'Buy Goods';
@@ -45,32 +45,49 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, total, onP
   // Payment Status State
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'initiated' | 'awaiting_payment' | 'processing' | 'success' | 'failed'>('idle');
 
-  // Checkout Request ID for polling
-  const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null);
+  // Checkout Request ID for polling (keeping for future use)
+  // const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null);
 
   // Digital Wallet State
   const [selectedWallet, setSelectedWallet] = useState<string>('');
   // Polling for payment status
-  const pollPaymentStatus = async (id: string) => {
+  const pollPaymentStatus = async (orderId: string) => {
+    let pollCount = 0;
+    const maxPolls = 40; // 2 minutes max (40 * 3 seconds)
+
     const poll = async () => {
       try {
-        const response = await api.get(`/payments/status/${id}`);
-        const { status } = response.data;
-        if (status === 'paid') {
+        pollCount++;
+        const response = await api.get(`/payments/status/${orderId}`);
+        const { paymentStatus } = response.data;
+
+        console.log(`Payment status poll ${pollCount}:`, paymentStatus);
+
+        if (paymentStatus === 'paid') {
           setPaymentStatus('success');
           setTimeout(() => {
             onPaymentSuccess('M-Pesa');
             onClose();
           }, 2000);
-        } else if (status === 'failed') {
+        } else if (paymentStatus === 'failed') {
           setPaymentStatus('failed');
-        } else {
+        } else if (pollCount < maxPolls) {
           // Continue polling
           setTimeout(poll, 3000); // Poll every 3 seconds
+        } else {
+          // Timeout after 2 minutes
+          console.warn('Payment polling timed out after 2 minutes');
+          setPaymentStatus('failed');
+          setError('Payment verification timed out. Please check your M-Pesa messages and contact support if needed.');
         }
       } catch (err) {
         console.error('Error polling payment status:', err);
-        setTimeout(poll, 3000);
+        if (pollCount < maxPolls) {
+          setTimeout(poll, 3000);
+        } else {
+          setPaymentStatus('failed');
+          setError('Failed to verify payment status. Please contact support.');
+        }
       }
     };
     poll();
@@ -125,8 +142,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, total, onP
       setError('Please fill in all required fields.');
       return false;
     }
-    if (phone.length !== 10) {
-      setError('Please enter a valid 10-digit phone number.');
+    // Accept both 10-digit (07xxxxxxxx) and 12-digit (2547xxxxxxxx) formats
+    if (phone.length !== 10 && phone.length !== 12) {
+      setError('Please enter a valid phone number (10 or 12 digits).');
       return false;
     }
     return true;
@@ -143,21 +161,29 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, total, onP
       setLoading(true);
       setError('');
       try {
-        const response = await api.post('/payments/initiate', {
-          orderId,
-          paymentMethod: 'mpesa',
-          phoneNumber: mpesaData.phone
+        const response = await api.post('/payments/mpesa/initiate', {
+          orderId: orderId,
+          phoneNumber: mpesaData.phone,
+          amount: total.toString()
         });
-        setCheckoutRequestId(response.data.checkoutRequestId);
-        setPaymentStatus('initiated');
-        // Simulate STK push sent, then await payment
-        setTimeout(() => {
-          setPaymentStatus('awaiting_payment');
-          // Start polling for status
-          pollPaymentStatus(response.data.checkoutRequestId);
-        }, 2000);
+
+        console.log('M-Pesa initiation response:', response.data);
+
+        if (response.data.success) {
+          setPaymentStatus('initiated');
+          // STK push sent, now await payment
+          setTimeout(() => {
+            setPaymentStatus('awaiting_payment');
+            // Start polling for status
+            pollPaymentStatus(orderId);
+          }, 2000);
+        } else {
+          throw new Error(response.data.message || 'Failed to initiate M-Pesa payment');
+        }
       } catch (err: any) {
-        setError('Failed to initiate M-Pesa payment. Please try again.');
+        console.error('M-Pesa payment error:', err);
+        setError(err.response?.data?.error || err.response?.data?.details || 'Failed to initiate M-Pesa payment. Please try again.');
+        setPaymentStatus('idle');
       } finally {
         setLoading(false);
       }
@@ -312,8 +338,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, total, onP
                         type="tel"
                         value={mpesaData.phone}
                         onChange={(e) => setMpesaData({ ...mpesaData, phone: e.target.value.replace(/[^0-9]/g, '') })}
-                        placeholder="0712345678"
-                        maxLength={10}
+                        placeholder="254712345678"
+                        maxLength={12}
                         required
                       />
                       <FormInput

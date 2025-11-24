@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../redux/store';
-import { fetchUserOrders, updateOrderStatus } from '../redux/ordersSlice';
+import { fetchUserOrders } from '../redux/ordersSlice';
 import { updateProfile } from '../redux/authSlice';
 // import io from 'socket.io-client';
 import FormInput from '../components/FormInput';
+import { formatTimestamp } from '../utils/timestamp';
 import './Profile.css';
 
 // const socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000');
@@ -134,7 +135,7 @@ const Profile: React.FC = () => {
         <ul>
           {orders.map(order => (
             <li key={order.id}>
-              Order #{order.id} - {new Date(order.createdAt).toLocaleDateString()} - {order.status} - KES {order.total}
+              Order #{order.id} - {formatTimestamp(order.createdAt)} - {order.status} - KES {order.total}
             </li>
           ))}
         </ul>

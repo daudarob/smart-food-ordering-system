@@ -1,0 +1,122 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+const resources = {
+  en: {
+    translation: {
+      'Welcome': 'Welcome',
+      'Logout': 'Logout',
+      'Home': 'Home',
+      'Menu': 'Menu',
+      'Cafeterias': 'Cafeterias',
+      'Cart': 'Cart',
+      'Profile': 'Profile',
+      'Admin Dashboard': 'Admin Dashboard',
+      'Order Now': 'Order Now',
+      'USIU-A Smart Food System': 'USIU-A Smart Food System',
+      'Experience the future of campus dining with our innovative food ordering platform.': 'Experience the future of campus dining with our innovative food ordering platform.',
+      'Email:': 'Email:',
+      'Phone:': 'Phone:',
+      'Address:': 'Address:',
+      'support@usiu.ac.ke': 'support@usiu.ac.ke',
+      '+254 730 116 000': '+254 730 116 000',
+      'USIU-Africa, Nairobi, Kenya': 'USIU-Africa, Nairobi, Kenya',
+      'Quick Links': 'Quick Links',
+      'Support': 'Support',
+      'Help Center': 'Help Center',
+      'FAQ': 'FAQ',
+      'Contact Us': 'Contact Us',
+      'Feedback': 'Feedback',
+      'Connect With Us': 'Connect With Us',
+      'Enter your email': 'Enter your email',
+      'Subscribe': 'Subscribe',
+      'All rights reserved.': 'All rights reserved.',
+      'Powered by USIU-A Smart Food System': 'Powered by USIU-A Smart Food System',
+      'Why Choose Our Smart Food System?': 'Why Choose Our Smart Food System?',
+      'Real-time Menu Updates': 'Real-time Menu Updates',
+      'Always know what\'s available with live menu updates and stock tracking.': 'Always know what\'s available with live menu updates and stock tracking.',
+      'Secure Payments': 'Secure Payments',
+      'Multiple payment options including M-Pesa and card payments with full security.': 'Multiple payment options including M-Pesa and card payments with full security.',
+      'Mobile Optimized': 'Mobile Optimized',
+      'Order from anywhere on campus with our responsive mobile-first design.': 'Order from anywhere on campus with our responsive mobile-first design.',
+      'Search menu items...': 'Search menu items...',
+      'All Categories': 'All Categories',
+      'Categories loading...': 'Categories loading...',
+      'Your cart is empty': 'Your cart is empty',
+      'KES': 'KES',
+      'Total: KES': 'Total: KES',
+      'Proceed to Checkout': 'Proceed to Checkout',
+      'Loading menu...': 'Loading menu...',
+      'Error:': 'Error:',
+      'Please log in to checkout': 'Please log in to checkout',
+    }
+  },
+  sw: {
+    translation: {
+      'Welcome': 'Karibu',
+      'Logout': 'Ondoka',
+      'Home': 'Nyumbani',
+      'Menu': 'Menyu',
+      'Cafeterias': 'Mikahawa',
+      'Cart': 'Mkokoteni',
+      'Profile': 'Wasifu',
+      'Admin Dashboard': 'Dashibodi ya Msimamizi',
+      'Order Now': 'Agiza Sasa',
+      'USIU-A Smart Food System': 'Mfumo wa Chakula wa Akili wa USIU-A',
+      'Experience the future of campus dining with our innovative food ordering platform.': 'Jionea mustakabali wa ulaji wa chuo na jukwaa letu la ubunifu la kuagiza chakula.',
+      'Email:': 'Barua pepe:',
+      'Phone:': 'Simu:',
+      'Address:': 'Anwani:',
+      'support@usiu.ac.ke': 'support@usiu.ac.ke',
+      '+254 730 116 000': '+254 730 116 000',
+      'USIU-Africa, Nairobi, Kenya': 'USIU-Africa, Nairobi, Kenya',
+      'Quick Links': 'Viungo vya Haraka',
+      'Support': 'Msaada',
+      'Help Center': 'Kituo cha Msaada',
+      'FAQ': 'Maswali Yanayoulizwa Mara Kwa Mara',
+      'Contact Us': 'Wasiliana Nasi',
+      'Feedback': 'Maoni',
+      'Connect With Us': 'Ungana Nasi',
+      'Enter your email': 'Ingiza barua pepe yako',
+      'Subscribe': 'Jisajili',
+      'All rights reserved.': 'Haki zote zimehifadhiwa.',
+      'Powered by USIU-A Smart Food System': 'Inaendeshwa na Mfumo wa Chakula wa Akili wa USIU-A',
+      'Why Choose Our Smart Food System?': 'Kwa Nini Uchague Mfumo Wetu wa Chakula wa Akili?',
+      'Real-time Menu Updates': 'Sasisho za Menyu za Wakati Halisi',
+      'Always know what\'s available with live menu updates and stock tracking.': 'Jua kila wakati kinachopatikana na sasisho za menyu za moja kwa moja na ufuatiliaji wa hisa.',
+      'Secure Payments': 'Malipo Salama',
+      'Multiple payment options including M-Pesa and card payments with full security.': 'Chaguzi nyingi za malipo ikijumuisha M-Pesa na malipo ya kadi na usalama kamili.',
+      'Mobile Optimized': 'Imerekebishwa kwa Simu',
+      'Order from anywhere on campus with our responsive mobile-first design.': 'Agiza kutoka popote kwenye chuo na muundo wetu unaojibu wa kwanza kwa simu.',
+      'Search menu items...': 'Tafuta vitu vya menyu...',
+      'All Categories': 'Makundi Yote',
+      'Categories loading...': 'Makundi yanapakia...',
+      'Your cart is empty': 'Mkokoteni wako ni tupu',
+      'KES': 'KES',
+      'Total: KES': 'Jumla: KES',
+      'Proceed to Checkout': 'Endelea kwa Malipo',
+      'Loading menu...': 'Inapakia menyu...',
+      'Error:': 'Kosa:',
+      'Please log in to checkout': 'Tafadhali ingia ili kulipa',
+    }
+  }
+};
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'en',
+    debug: false,
+    interpolation: {
+      escapeValue: false,
+    },
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag'],
+      caches: ['localStorage'],
+    },
+  });
+
+export default i18n;

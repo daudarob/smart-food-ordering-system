@@ -1,12 +1,19 @@
 const express = require('express');
-const { initiatePayment, stripeWebhook, mpesaWebhook, getPaymentStatus } = require('../controllers/payments');
+const { initiateMpesaPayment, mpesaCallback, checkPaymentStatus, manualPaymentConfirm } = require('../controllers/payments');
 const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/initiate', authenticate, initiatePayment);
-router.get('/status/:checkoutRequestId', authenticate, getPaymentStatus);
-router.post('/webhook/stripe', express.raw({ type: 'application/json' }), stripeWebhook);
-router.post('/webhook/mpesa', express.json(), mpesaWebhook);
+// Initiate M-Pesa payment
+router.post('/mpesa/initiate', authenticate, initiateMpesaPayment);
+
+// Receive M-Pesa callbacks
+router.post('/mpesa/callback', mpesaCallback);
+
+// Check payment status
+router.get('/status/:orderId', authenticate, checkPaymentStatus);
+
+// Manual payment confirmation
+router.post('/manual-confirm/:orderId', authenticate, manualPaymentConfirm);
 
 module.exports = router;

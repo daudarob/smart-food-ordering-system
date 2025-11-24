@@ -1,0 +1,28 @@
+.menu-card-skeleton {
+  background: var(--surface-primary, rgba(255, 255, 255, 0.1));
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.2));
+}
+
+.menu-image-skeleton {
+  height: 180px;
+  background: var(--surface-secondary, rgba(255, 255, 255, 0.05));
+}
+
+.menu-content-skeleton {
+  padding: 20px;
+  text-align: center;
+}
+
+.menu-name-skeleton {
+  margin-bottom: 10px;
+}
+
+.menu-price-skeleton {
+  margin-bottom: 15px;
+}
+
+.menu-btn-skeleton {
+  margin-top: 15px;
+}

@@ -5,9 +5,9 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
       id: {
-        type: Sequelize.UUID,
+        type: Sequelize.STRING,
         primaryKey: true,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        defaultValue: Sequelize.UUIDV4
       },
       email: {
         type: Sequelize.STRING(255),
@@ -30,15 +30,19 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true
       },
+      fcm_token: {
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
       role: {
-        type: Sequelize.ENUM('user', 'admin'),
+        type: Sequelize.ENUM('student', 'staff', 'cafeteria_admin'),
         allowNull: false,
-        defaultValue: 'user'
+        defaultValue: 'student'
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('NOW()')
+        defaultValue: Sequelize.NOW
       }
     });
 

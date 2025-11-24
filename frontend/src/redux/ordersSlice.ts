@@ -44,9 +44,13 @@ export const fetchUserOrders = createAsyncThunk(
 
 export const createOrder = createAsyncThunk(
   'orders/createOrder',
-  async ({ items, total, paymentMethod }: { items: { menuId: string; quantity: number }[]; total: number; paymentMethod: string }, { rejectWithValue }) => {
+  async ({ items, total, paymentMethod, phoneNumber }: { items: { menuId: string; quantity: number }[]; total: number; paymentMethod: string; phoneNumber?: string }, { rejectWithValue }) => {
     try {
-      const response = await api.post('/orders', { items, total, paymentMethod });
+      const payload: any = { items, total, paymentMethod };
+      if (paymentMethod === 'mpesa' && phoneNumber) {
+        payload.phoneNumber = phoneNumber;
+      }
+      const response = await api.post('/orders', payload);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.error || 'Failed to create order');

@@ -273,6 +273,7 @@
 
 .menu-item-card {
   background: white;
+  border: 2px solid white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -498,6 +499,39 @@
   background: #f8f9fa;
 }
 
+.checkout-button-container {
+  margin-top: 1rem;
+  text-align: center;
+  padding: 1rem;
+  background: #007bff;
+  border-radius: 8px;
+}
+
+.checkout-button-container button {
+  background: white !important;
+  color: #007bff !important;
+  border: 2px solid white !important;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.checkout-button-container button:hover {
+  background: #f8f9fa !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.checkout-button-container button:disabled {
+  background: #6c757d !important;
+  color: white !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .cart-total {
   margin-bottom: 1rem;
 }
@@ -527,7 +561,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -654,6 +688,6 @@
 @media (prefers-contrast: high) {
   .cafeteria-card,
   .menu-item-card {
-    border: 2px solid #000;
+    border: 2px solid white;
   }
 }
